@@ -1,35 +1,22 @@
-import sqlite3
-from random import *
-import datetime
+import requests
+import bs4
 
-class IncidentDatabase:
+
+class Parser():
     def __init__(self):
-        self.conn = sqlite3.connect("IncidentDB.db")
-        self.cursor = self.conn.cursor()
+        self.send()
 
-    def employees(self):
-        creattab = "create table IF NOT EXISTS employees(id INTEGER PRIMARY KEY autoincrement, " \
-                    "'registration number of the certificate' int, 'full name' text, 'title' text, 'address' text, " \
-                    "'family composition' text);"
-        self.cursor.execute(creattab)
-        self.conn.commit()
-        tabl = "insert into employees('registration number of the certificate', 'full name', 'title', " \
-                "'address', 'family composition') values (?, ?, ?, ?, ?);"
-        while True:
-            exit1 = input("Для завершения введите 'д' ")
-            if exit1 == "д":
-                break
-            else:
-                try:
-                    self.cursor.execute(tabl, (randint(1000000, 9999999), input("ФИО сотрудника: "),
-                                               input("Звание: "), input("Адрес: "), input("Состав семьи: ")))
-                except TypeError:
-                    print("Неверный ввод")
-        self.conn.commit()
-        zap = "select * from employees;"
-        self.cursor.execute(zap)
-        k = self.cursor.fetchall()
-        print(k)
-        self.cursor.close()
-        self.conn.close()
-        print("bla-bla-bla")
+    def send(self):
+        request = requests.get('https://www.lamoda.by/c/7628/shoes-women-shoes-cossacks/?sitelink=topmenuW&l=6')
+        bs = bs4.BeautifulSoup(request.text, "html.parser")
+        # print(bs)
+        for i in bs.find_all('span', class_='x-product-card-description__price-WEB8507_price_no_bold'):
+            print(i.text)
+        for i in bs.find_all('div', class_='x-product-card-description__brand-name'):
+            print(i.text)
+        for i in bs.find_all('div', class_='x-product-card-description__product-name'):
+            print(i.text)
+
+
+pars = Parser()
+pars.send()
