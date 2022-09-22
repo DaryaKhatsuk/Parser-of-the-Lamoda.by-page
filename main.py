@@ -17,6 +17,5 @@ class Parser():
         for i in bs.find_all('div', class_='x-product-card-description__product-name'):
             print(i.text)
 
-
 pars = Parser()
 pars.send()
