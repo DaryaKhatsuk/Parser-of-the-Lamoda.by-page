@@ -32,4 +32,4 @@ class IncidentDatabase:
         print(k)
         self.cursor.close()
         self.conn.close()
-        print("a")
+        print("bla-bla-bla")
